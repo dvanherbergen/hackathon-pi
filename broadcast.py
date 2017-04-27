@@ -38,7 +38,7 @@ m.TIMEOUT = 0.5
 # 38400 baud
 m.BAUDRATE = 19200
 
-i = m.Instrument('/dev/tty.usbserial-AK04OVSN', 1)
+#i = m.Instrument('/dev/tty.usbserial-AK04OVSN', 1)
 
 
 
