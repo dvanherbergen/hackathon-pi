@@ -105,7 +105,7 @@ client.connect()
 
 def changeValve(client, userdata, message):
   pos = message.payload
-  if (pos >= 0 && pos <= 100):
+  if (pos >= 0 & pos <= 100):
     print "Setting valve to: %s " % pos
   elif:
     print "Invalid valve setting provided : %s " % pos
