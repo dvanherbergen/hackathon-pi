@@ -110,7 +110,6 @@ def changeValve(client, userdata, message):
   else:
     print "Invalid valve setting provided : %s " % pos
 
-
 client.subscribe("colruyt-pi/valve", 1, changeValve)
 
 def main_loop():
