@@ -128,6 +128,7 @@ def main_loop():
   data['temperature'] = temp
   data['recorded_on'] = time.time()
 
+  json_data = json.dumps(data)
   client.publish("colruyt-pi", json_data, 0)
   print(json_data)
 
