@@ -3,12 +3,11 @@ import socket
 import fcntl
 import struct
 import time
-
+import Adafruit_DHT 
 
 # Import SDK packages
 from AWSIoTPythonSDK.MQTTLib import AWSIoTMQTTClient
 
-starttime=time.time()
 
 def get_ip_address(ifname):
     s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -33,17 +32,21 @@ myMQTTClient.configureMQTTOperationTimeout(5)  # 5 sec
 myMQTTClient.connect()
 
 def main_loop():
-	eth0_ip = get_ip_address("eth0")
-	wlan0_ip = get_ip_address("wlan0")
-	print("eth0  : %s" % eth0_ip)
-	print("wlan0 : %s" % wlan0_ip)
-	myMQTTClient.publish("colruyt-pi/ip/eth0", eth0_ip, 0)
-	myMQTTClient.publish("colruyt-pi/ip/wlan0", wlan0_ip, 0)
+	print("loop")
+	#eth0_ip = get_ip_address("eth0")
+	#wlan0_ip = get_ip_address("wlan0")
+	#print("eth0  : %s" % eth0_ip)
+	#print("wlan0 : %s" % wlan0_ip)
+	#myMQTTClient.publish("colruyt-pi/ip/eth0", eth0_ip, 0)
+	moist, temp = Adafruit_DHT.read_retry(Adafruit_DHT.AM2302, 4)
+	myMQTTClient.publish("colruyt-pi/moist",moist, 0)
+	myMQTTClient.publish("colruyt-pi/temp",temp,0)
+
 
 
 while True:
-  main_loop()
-  time.sleep(60.0 - ((time.time() - starttime) % 5.0))
+	main_loop()
+	time.sleep(5)
 
 
 myMQTTClient.disconnect()
