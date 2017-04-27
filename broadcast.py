@@ -113,7 +113,8 @@ def changeValve(client, userdata, message):
       print "============================================"
       print "Received new valve position: %s " % pos
       print "============================================"
-      nonlocal desiredPos = pos
+      global desiredPos
+      desiredPos = pos
     else:
       print "Invalid valve setting provided : %s " % pos
   except:
@@ -127,7 +128,8 @@ def main_loop():
   if (desiredPos > -1):
     # update valve state
     i.write_register(0, desiredPos, numberOfDecimals=2)
-    nonlocal desiredPos = -1
+    global desiredPos
+    desiredPos = -1
 
 	#eth0_ip = get_ip_address("eth0")
 	#wlan0_ip = get_ip_address("wlan0")
