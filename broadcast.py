@@ -23,6 +23,7 @@ def get_ip_address(ifname):
         struct.pack('256s', ifname[:15])
     )[20:24])
 
+includeTemp = False
 
 
 m = minimalmodbus
@@ -124,11 +125,10 @@ client.subscribe("colruyt-pi/valve", 1, changeValve)
 
 def main_loop():
 	
-
+  global desiredPos
   if (desiredPos > -1):
     # update valve state
     i.write_register(0, desiredPos, numberOfDecimals=2)
-    global desiredPos
     desiredPos = -1
 
 	#eth0_ip = get_ip_address("eth0")
@@ -136,15 +136,17 @@ def main_loop():
 	#print("eth0  : %s" % eth0_ip)
 	#print("wlan0 : %s" % wlan0_ip)
 	#client.publish("colruyt-pi/ip/eth0", eth0_ip, 0)
-  print "Reading temperature..."
-  moist, temp = Adafruit_DHT.read_retry(Adafruit_DHT.AM2302, 4)
-
-  print "Reading Control Valve..."
 
   data = {}
+
+  if includeTemp:
+    print "Reading temperature..."
+    moist, temp = Adafruit_DHT.read_retry(Adafruit_DHT.AM2302, 4)
+    data['moisture'] = moist
+    data['temperature'] = temp
+
+  print "Reading valve data..."
   data['device_id'] = "colruyt-pi"
-  data['moisture'] = moist
-  data['temperature'] = temp
   data['recorded_on'] = time.time()
   data['override_control'] = override_control.get(i.read_register(1, 0), "unknown")
   data['actuator_type'] = actuator_type.get(i.read_register(3, 0), "unknown")
