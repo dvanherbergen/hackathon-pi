@@ -4,6 +4,7 @@ import fcntl
 import struct
 import time
 import Adafruit_DHT 
+import json
 
 # Import SDK packages
 from AWSIoTPythonSDK.MQTTLib import AWSIoTMQTTClient
@@ -32,16 +33,19 @@ client.configureMQTTOperationTimeout(5)  # 5 sec
 client.connect()
 
 def main_loop():
-	print("loop")
+	
 	#eth0_ip = get_ip_address("eth0")
 	#wlan0_ip = get_ip_address("wlan0")
 	#print("eth0  : %s" % eth0_ip)
 	#print("wlan0 : %s" % wlan0_ip)
 	#client.publish("colruyt-pi/ip/eth0", eth0_ip, 0)
 	moist, temp = Adafruit_DHT.read_retry(Adafruit_DHT.AM2302, 4)
-	client.publish("colruyt-pi/moist",moist, 0)
-	client.publish("colruyt-pi/temp",temp,0)
 
+  data = {"device_id":"colruyt-pi", "timestamp": time.time(), "moisture": moist, "temperature": temp}
+
+  json_data = json.dumps(data)
+  client.publish("colruyt-pi", json_data, 0)
+  print("Sending")
 
 
 while True:
