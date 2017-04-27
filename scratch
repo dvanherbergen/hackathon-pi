@@ -1,0 +1,26 @@
+data['device_id'] = "colruyt-pi"
+data['setpoint'] = i.read_register(0, 2)
+data['override_control'] = override_control.get(i.read_register(1, 0), "unknown")
+data['actuator_type'] = actuator_type.get(i.read_register(3, 0), "unknown")
+data['relative_pos'] = i.read_register(4, 2)
+data['absolute_pos'] = i.read_register(5, 2)
+data['relative_flow'] = i.read_register(6, 2)
+data['absolute_flow'] = i.read_long(9, 3)
+data['setpoint_absolute_flow'] = i.read_long(13, 3)
+data['setpoint_analog'] = i.read_register(15, 2)
+data['active_sequence'] = active_sequence.get(i.read_register(16, 0), "unknown")
+data['serial'] = str(i.read_register(100, 0)) + "-" + str(i.read_register(101, 0)) + "-" + str(i.read_register(102, 0))
+data['firmware'] = i.read_register(103, 0)
+data['malfunction'] = i.read_register(104, 0)
+data['vmax_1'] = i.read_register(105, 2)
+data['vmax_2'] = i.read_register(106, 2)
+data['control_mode'] = control_mode.get(i.read_register(116, 0), "unknown")
+data['unit_selection_flow'] = unit_selection_flow.get(i.read_register(117, 0), "unknown")
+data['setpoint_source'] = setpoint_source.get(i.read_register(118, 0), "unknown")
+
+
+
+
+
+
+
