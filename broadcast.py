@@ -88,7 +88,7 @@ setpoint_source = {
   1: "Bus"
 }
 
-
+global desiredPos
 desiredPos = -1
 
 
