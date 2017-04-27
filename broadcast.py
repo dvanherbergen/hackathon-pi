@@ -104,11 +104,14 @@ client.connect()
 
 
 def changeValve(client, userdata, message):
-  pos = message.payload
-  if (pos >= 0 & pos <= 100):
-    print "Setting valve to: %s " % pos
-  else:
-    print "Invalid valve setting provided : %s " % pos
+  try:
+    pos = int(message.payload)
+    if (pos >= 0 & pos <= 100):
+      print "Setting valve to: %s " % pos
+    else:
+      print "Invalid valve setting provided : %s " % pos
+  except:
+    print "Invalid valve setting provided : %s " % message.payload
 
 client.subscribe("colruyt-pi/valve", 1, changeValve)
 
