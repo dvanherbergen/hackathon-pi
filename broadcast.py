@@ -39,7 +39,7 @@ m.TIMEOUT = 0.5
 m.BAUDRATE = 19200
 
 i = m.Instrument('/dev/ttyUSB0', 1)
-
+#i.debug = True
 
 override_control = {
   0: "None",
@@ -106,11 +106,14 @@ def changeValve(client, userdata, message):
   try:
     pos = int(message.payload)
     if (pos >= 0 & pos <= 100):
+      print "=============================="
       print "Setting valve to: %s " % pos
+      print "=============================="
+      i.write_register(0, pos, numberOfDecimals=2)
     else:
       print "Invalid valve setting provided : %s " % pos
   except:
-    print "Invalid valve setting provided : %s " % message.payload
+    print "! Error setting valve to : %s " % message.payload
 
 client.subscribe("colruyt-pi/valve", 1, changeValve)
 
@@ -121,13 +124,15 @@ def main_loop():
 	#print("eth0  : %s" % eth0_ip)
 	#print("wlan0 : %s" % wlan0_ip)
 	#client.publish("colruyt-pi/ip/eth0", eth0_ip, 0)
-  moist, temp = Adafruit_DHT.read_retry(Adafruit_DHT.AM2302, 4)
+  #print "Reading temperature..."
+  #moist, temp = Adafruit_DHT.read_retry(Adafruit_DHT.AM2302, 4)
+
+  print "Reading Control Valve..."
 
   data = {}
   data['device_id'] = "colruyt-pi"
-
-  data['moisture'] = moist
-  data['temperature'] = temp
+  #data['moisture'] = moist
+  #data['temperature'] = temp
   data['recorded_on'] = time.time()
   data['override_control'] = override_control.get(i.read_register(1, 0), "unknown")
   data['actuator_type'] = actuator_type.get(i.read_register(3, 0), "unknown")
@@ -148,11 +153,13 @@ def main_loop():
   data['setpoint_source'] = setpoint_source.get(i.read_register(118, 0), "unknown")
 
   json_data = json.dumps(data)
-  client.publish("colruyt-pi", json_data, 0)
   print(json_data)
+
+  client.publish("colruyt-pi", json_data, 0)
+  print "_______________"
 
 while True:
 	main_loop()
-	time.sleep(5)
+	time.sleep(10)
 
 client.disconnect()
