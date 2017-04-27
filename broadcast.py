@@ -40,9 +40,7 @@ def main_loop():
 	#print("wlan0 : %s" % wlan0_ip)
 	#client.publish("colruyt-pi/ip/eth0", eth0_ip, 0)
 	moist, temp = Adafruit_DHT.read_retry(Adafruit_DHT.AM2302, 4)
-
   data = {"device_id":"colruyt-pi", "timestamp": time.time(), "moisture": moist, "temperature": temp}
-
   json_data = json.dumps(data)
   client.publish("colruyt-pi", json_data, 0)
   print("Sending")
