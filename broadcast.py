@@ -124,15 +124,15 @@ def main_loop():
 	#print("eth0  : %s" % eth0_ip)
 	#print("wlan0 : %s" % wlan0_ip)
 	#client.publish("colruyt-pi/ip/eth0", eth0_ip, 0)
-  #print "Reading temperature..."
-  #moist, temp = Adafruit_DHT.read_retry(Adafruit_DHT.AM2302, 4)
+  print "Reading temperature..."
+  moist, temp = Adafruit_DHT.read_retry(Adafruit_DHT.AM2302, 4)
 
   print "Reading Control Valve..."
 
   data = {}
   data['device_id'] = "colruyt-pi"
-  #data['moisture'] = moist
-  #data['temperature'] = temp
+  data['moisture'] = moist
+  data['temperature'] = temp
   data['recorded_on'] = time.time()
   data['override_control'] = override_control.get(i.read_register(1, 0), "unknown")
   data['actuator_type'] = actuator_type.get(i.read_register(3, 0), "unknown")
