@@ -1,3 +1,6 @@
+# TODO : concurrency issues..
+
+
 # Import packages to access ip info
 import socket
 import fcntl
@@ -86,6 +89,7 @@ setpoint_source = {
 }
 
 
+desiredPos = -1
 
 
 
@@ -106,10 +110,10 @@ def changeValve(client, userdata, message):
   try:
     pos = int(message.payload)
     if (pos >= 0 & pos <= 100):
-      print "=============================="
-      print "Setting valve to: %s " % pos
-      print "=============================="
-      i.write_register(0, pos, numberOfDecimals=2)
+      print "============================================"
+      print "Received new valve position: %s " % pos
+      print "============================================"
+      desiredPos = pos
     else:
       print "Invalid valve setting provided : %s " % pos
   except:
@@ -119,6 +123,12 @@ client.subscribe("colruyt-pi/valve", 1, changeValve)
 
 def main_loop():
 	
+
+  if (desiredPos > -1):
+    # update valve state
+    i.write_register(0, desiredPos, numberOfDecimals=2)
+    desiredPos = -1
+
 	#eth0_ip = get_ip_address("eth0")
 	#wlan0_ip = get_ip_address("wlan0")
 	#print("eth0  : %s" % eth0_ip)
@@ -160,6 +170,6 @@ def main_loop():
 
 while True:
 	main_loop()
-	time.sleep(10)
+	time.sleep(2)
 
 client.disconnect()
