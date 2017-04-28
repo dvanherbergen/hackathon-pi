@@ -1,5 +1,5 @@
 #!/bin/bash
 
-sudo python sensor.py &
-sudo python broadcast.py
+python sensor.py &
+python broadcast.py
 
