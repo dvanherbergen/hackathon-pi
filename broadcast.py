@@ -6,7 +6,6 @@ import socket
 import fcntl
 import struct
 import time
-import Adafruit_DHT 
 import minimalmodbus
 import json
 
@@ -97,7 +96,7 @@ desiredPos = -1
 # For certificate based connection
 client = AWSIoTMQTTClient("colruyt-pi")
 client.configureEndpoint("a31v8wvq1ft4tj.iot.eu-west-2.amazonaws.com", 8883)
-client.configureCredentials("/home/pi/certs/aws-root-ca.cert", "/home/pi/certs/colruyt-pi-private.key", "/home/pi/certs/colruyt-pi.cert")
+client.configureCredentials("aws.x1", "private.x1", "cert.x1")
 
 client.configureOfflinePublishQueueing(-1)  # Infinite offline Publish queueing
 client.configureDrainingFrequency(2)  # Draining: 2 Hz
@@ -105,20 +104,6 @@ client.configureConnectDisconnectTimeout(10)  # 10 sec
 client.configureMQTTOperationTimeout(5)  # 5 sec
 
 client.connect()
-
-
-def addTemperature(data):
-  try:
-    data_file = open("am2302.data", "r")
-    val = data_file.read()
-    data_file.close()
-    temp = val.split('@')[0]
-    moisture = val.split('@')[1]
-    data['moisture'] = moisture
-    data['temperature'] = temp
-  except:
-    print "Error reading temperature"
-    raise
 
 def changeValve(client, userdata, message):
   try:
@@ -151,8 +136,6 @@ def main_loop():
 	#client.publish("colruyt-pi/ip/eth0", eth0_ip, 0)
 
   data = {}
-
-  addTemperature(data)
 
   print "Reading valve data..."
   data['device_id'] = "colruyt-pi"
