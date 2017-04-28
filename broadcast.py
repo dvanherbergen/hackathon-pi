@@ -107,6 +107,18 @@ client.configureMQTTOperationTimeout(5)  # 5 sec
 client.connect()
 
 
+def addTemperature(data):
+  try:
+    data_file = open("am2302.data", "r")
+    val = data_file.read()
+    data_file.close()
+    temp = val.split('@')[0]
+    moisture = val.split('@')[1]
+    data['moisture'] = moist
+    data['temperature'] = temp
+  except:
+    print "Error reading temperature"
+
 def changeValve(client, userdata, message):
   try:
     pos = int(message.payload)
@@ -139,11 +151,7 @@ def main_loop():
 
   data = {}
 
-  if includeTemp:
-    print "Reading temperature..."
-    moist, temp = Adafruit_DHT.read_retry(Adafruit_DHT.AM2302, 4)
-    data['moisture'] = moist
-    data['temperature'] = temp
+  addTemperature(data)
 
   print "Reading valve data..."
   data['device_id'] = "colruyt-pi"
