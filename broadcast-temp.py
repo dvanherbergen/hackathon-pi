@@ -45,6 +45,6 @@ def main_loop():
 
 while True:
 	main_loop()
-	time.sleep(2)
+	time.sleep(3)
 
 client.disconnect()
