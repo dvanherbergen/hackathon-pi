@@ -96,7 +96,7 @@ desiredPos = -1
 # For certificate based connection
 client = AWSIoTMQTTClient("colruyt-pi")
 client.configureEndpoint("a31v8wvq1ft4tj.iot.eu-west-2.amazonaws.com", 8883)
-client.configureCredentials("aws.x1", "private.x1", "cert.x1")
+client.configureCredentials("aws.x1.cert", "private.x1.key", "cert.x1.cert")
 
 client.configureOfflinePublishQueueing(-1)  # Infinite offline Publish queueing
 client.configureDrainingFrequency(2)  # Draining: 2 Hz
