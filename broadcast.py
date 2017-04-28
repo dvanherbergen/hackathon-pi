@@ -114,10 +114,11 @@ def addTemperature(data):
     data_file.close()
     temp = val.split('@')[0]
     moisture = val.split('@')[1]
-    data['moisture'] = moist
+    data['moisture'] = moisture
     data['temperature'] = temp
   except:
     print "Error reading temperature"
+    raise
 
 def changeValve(client, userdata, message):
   try:
